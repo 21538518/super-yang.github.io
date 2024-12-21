@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>axios+vue</title>
+</head>
+
+<body>
+<div id="app">
+    <input type="button" value="获取笑话" @click="getJoke">
+    <p>{{ joke }}</p>
+</div>
+<!-- 官网提供的 axios 在线地址 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            joke: "很好笑的笑话"  // 初始笑话内容
+        },
+        methods: {
+            getJoke: function () {
+                // 使用箭头函数，自动绑定 this
+                axios.get("https://v2.jokeapi.dev/joke/Any")
+                    .then((response) => {
+                        // 判断是否有错误
+                        if (response.data.error) {
+                            alert("Failed to load joke.");
+                            return;
+                        }
+
+                        // 判断笑话类型
+                        if (response.data.type === "twopart") {
+                            // 如果是双段笑话，显示设置和回答
+                            this.joke = response.data.setup + "\n" + response.data.delivery;
+                        } else {
+                            // 否则直接显示笑话
+                            this.joke = response.data.joke;
+                        }
+                    })
+                    .catch((err) => {
+                        console.error(err);  // 捕获并打印错误
+                    });
+            }
+        }
+    })
+</script>
+</body>
+
+</html>

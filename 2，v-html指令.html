@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-html指令</title>
+</head>
+
+<body>
+    <div id="app">
+        <h2 v-html="content"></h2>
+        <h2 v-text="content"></h2>
+<!--      html命令解析普通数据和text一致，但是html属性内容解析不一致-->
+
+    </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                // content: "黑马程序员",
+                content:"<a href=\"https://leetcode.cn/problemset/\">leetcode刷题</a>"
+
+
+            }
+        })
+    </script>
+</body>
+
+</html>

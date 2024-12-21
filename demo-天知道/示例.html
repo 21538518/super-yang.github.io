@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>天知道</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+<div class="wrap" id="app">
+  <div class="search_form">
+    <div class="logo"><img src="img/logo.png" alt="logo" /></div>
+    <div class="form_group">
+      <!-- 输入省份和城市 -->
+      <input type="text" class="input_txt" placeholder="请输入查询的省份" v-model="province" @keyup.enter="queryWeather" />
+      <input type="text" class="input_txt" placeholder="请输入查询的城市" v-model="city" @keyup.enter="queryWeather" />
+      <button class="input_sub" @click="queryWeather">搜 索</button>
+    </div>
+    <div class="hotkey">
+      <a href="javascript:;" v-for="city in hotCitys" @click="clickSearch(city)">{{ city }}</a>
+    </div>
+  </div>
+  <ul class="weather_list">
+    <!-- 渲染天气数据 -->
+    <li v-if="weatherData"  :style="{transitionDelay: '20ms'}">
+      <div class="info_type">
+        <span class="iconfont">{{ weatherData.weather1 }}</span> <!-- 显示天气类型 -->
+      </div>
+      <div class="info_temp">
+        <b>{{ weatherData.temperature }}°C</b>
+      </div>
+
+    </li>
+  </ul>
+</div>
+
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 官网提供的 axios 在线地址 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      province: "",  // 输入的省份
+      city: "",      // 输入的城市
+      weatherData: null, // 用来接收 API 返回的数据
+      hotCitys: ["北京", "上海", "广州", "深圳"]
+    },
+    methods: {
+      queryWeather() {
+        // 检查省份和城市输入是否为空
+        if (!this.province || !this.city) {
+          alert("省份和城市不能为空");
+          return;
+        }
+        this.weatherData = null; // 清空旧数据
+        // 拼接完整的 API 请求 URL
+        axios.get(`https://cn.apihz.cn/api/tianqi/tqyb.php?id=88888888&key=88888888&sheng=${this.province}&place=${this.city}`)
+                .then(res => {
+                  console.log(res);
+                  // 处理返回的数据
+                  this.weatherData = res.data; // 将返回的完整数据赋值给 weatherData
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+                .finally(() => { });
+      },
+      clickSearch(city) {
+        this.province=city;
+        this.city = city;
+
+      }
+    }
+  });
+</script>
+</body>
+
+</html>
